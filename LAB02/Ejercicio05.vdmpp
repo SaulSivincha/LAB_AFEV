@@ -1,0 +1,22 @@
+class Eje5
+
+functions
+
+public riesgo : seq of int -> bool
+riesgo(l) ==
+  (len l <= 3) or
+  (forall x in set elems l & x > 500);
+
+
+public casos : () -> seq of bool
+casos() ==
+[
+  riesgo([501,202,600,300,700]),
+  riesgo([600,600,700,800,900]),
+  riesgo([500,400,300,200]),
+  riesgo([600,800,900,900]),
+  riesgo([100,100,200]),
+  riesgo([200,50])
+];
+
+end Eje5
