@@ -1,0 +1,86 @@
+class MonitoreoTemperatura
+/*
+  =============================================================================
+  UNIVERSIDAD NACIONAL DE SAN AGUSTIN DE AREQUIPA
+  FACULTAD DE INGENIERÍA DE PRODUCCIÓN Y SERVICIOS
+  ESCUELA PROFESIONAL DE INGENIERÍA DE SISTEMAS
+  
+  Asignatura: Aspectos Formales de Especificación y Verificación
+  Docente:    Mg. Maribel Molina Barriga
+  Práctica:   Laboratorio 02 - Prueba de cuantificadores
+  Estudiante: Luque Condori Luis Guillermo
+  
+  III. EJERCICIOS/PROBLEMAS PROPUESTOS
+  Ejercicio 3: Monitoreo de Temperatura Industrial
+  -----------------------------------------------------------------------------
+  En un reactor químico se miden temperaturas cada minuto. Para activar una
+  alarma de seguridad, debe cumplirse que existe al menos una temperatura
+  superior a 120 °C.
+  
+  Expresión formal:
+      ∃ t ∈ Temperaturas: t > 120
+  
+  Casos de prueba:
+      [100, 110, 115, 118, 119] -> false
+      [100, 110, 125, 118, 119] -> true
+      [121, 119, 118, 117, 116] -> true
+      [90, 95, 100, 110, 120]   -> false
+  =============================================================================
+*/
+
+types
+    -- Tipo que representa una secuencia ordenada de lecturas de temperatura
+    public Temperaturas = seq of real;
+
+functions
+    -- Función de especificación formal:
+    -- Evalúa si en el conjunto de lecturas de temperaturas existe al menos
+    -- un valor estrictamente superior al umbral crítico de 120 °C.
+    public static activarAlarma: Temperaturas -> bool
+    activarAlarma(temperaturas) ==
+        exists t in set elems temperaturas & t > 120;
+
+    -- Alternativa utilizando cuantificación directa sobre secuencias (seq):
+    public static activarAlarmaSeq: Temperaturas -> bool
+    activarAlarmaSeq(temperaturas) ==
+        exists t in seq temperaturas & t > 120;
+
+    -------------------------------------------------------------------------
+    -- CASOS DE PRUEBA INDIVIDUALES (Definidos en la Guía de Laboratorio)
+    -------------------------------------------------------------------------
+
+    -- Caso 1: Todas las temperaturas están por debajo de 120 °C
+    -- Resultado esperado: false
+    public static casoPrueba1: () -> bool
+    casoPrueba1() ==
+        activarAlarma([100, 110, 115, 118, 119]);
+
+    -- Caso 2: Existe una lectura (125 °C) que supera los 120 °C
+    -- Resultado esperado: true
+    public static casoPrueba2: () -> bool
+    casoPrueba2() ==
+        activarAlarma([100, 110, 125, 118, 119]);
+
+    -- Caso 3: La primera lectura (121 °C) supera los 120 °C
+    -- Resultado esperado: true
+    public static casoPrueba3: () -> bool
+    casoPrueba3() ==
+        activarAlarma([121, 119, 118, 117, 116]);
+
+    -- Caso 4: La temperatura máxima es exactamente 120 °C (no es > 120 °C)
+    -- Resultado esperado: false
+    public static casoPrueba4: () -> bool
+    casoPrueba4() ==
+        activarAlarma([90, 95, 100, 110, 120]);
+
+    -- Ejecución de todos los casos de prueba mapeando la entrada con su resultado
+    public static ejecutarTodos: () -> map seq of real to bool
+    ejecutarTodos() ==
+    {
+        [100, 110, 115, 118, 119] |-> casoPrueba1(),
+        [100, 110, 125, 118, 119] |-> casoPrueba2(),
+        [121, 119, 118, 117, 116] |-> casoPrueba3(),
+        [90, 95, 100, 110, 120]   |-> casoPrueba4()
+    };
+
+end MonitoreoTemperatura
